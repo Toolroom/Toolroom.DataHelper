@@ -6,3 +6,5 @@
 /src/Toolroom.DataHelper/obj
 *.DotSettings
 *.suo
+/src/packages
+/src/.vs/

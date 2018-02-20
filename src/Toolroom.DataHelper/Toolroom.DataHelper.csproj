@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComputationEntity\IComputationEntity.cs" />
+    <Compile Include="Context\ArithAbortOnInterceptor.cs" />
     <Compile Include="Context\ContextExtensions.cs" />
     <Compile Include="EditUser\IEditUserEntity.cs" />
     <Compile Include="IsActive\ActiveState.cs" />
@@ -72,6 +73,9 @@
     <Compile Include="XmlEntity\XmlMappedAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Link>LICENSE</Link>
+    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
