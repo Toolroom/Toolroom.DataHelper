@@ -26,7 +26,7 @@ namespace Toolroom.DataHelper
             {
                 return null;
             }
-            return document.ToString();
+            return document.ToString(SaveOptions.DisableFormatting);
         }
 
         public static void FillPropertiesFromXmlValues(this IXmlEntity entity, Type xmlMappedAttributeType, string xmlValues)
