@@ -8,3 +8,5 @@
 *.suo
 /src/packages
 /src/.vs/
+/.vs/slnx.sqlite
+/.vs/ProjectSettings.json
