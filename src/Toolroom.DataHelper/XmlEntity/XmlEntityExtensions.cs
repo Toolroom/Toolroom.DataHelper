@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml.Linq;
 
@@ -47,7 +48,27 @@ namespace Toolroom.DataHelper
         }
 
         #region Generic
-        private static object Get(this XDocument document, PropertyInfo propertyInfo)
+        public static object Get<T, TValue>(this XDocument document, Expression<Func<T, TValue>> propertySelector) 
+            => Get(document, propertySelector.Body);
+
+        public static object Get(this XDocument document, Expression propertyExpression)
+        {
+            switch (propertyExpression)
+            {
+                case MemberExpression memberExpression when memberExpression.Member.MemberType == MemberTypes.Property:
+                    return Get(document, (PropertyInfo) memberExpression.Member);
+                case MemberExpression _:
+                    throw new Exception($"MemberExpressions of types other than other than {MemberTypes.Property} are not supported.");
+                case UnaryExpression unaryExpression when unaryExpression.NodeType == ExpressionType.Convert:
+                    return Get(document, unaryExpression.Operand);
+                case UnaryExpression _:
+                    throw new Exception($"UnaryExpression of types other than other than {ExpressionType.Convert} are not supported.");
+                default:
+                    throw new Exception($"Expressions of types other than other than {nameof(MemberExpression)}, {nameof(UnaryExpression)} are not supported.");
+            }
+        }
+
+        public static object Get(this XDocument document, PropertyInfo propertyInfo)
         {
             var propertyName = propertyInfo.Name;
             Type type = propertyInfo.PropertyType;
