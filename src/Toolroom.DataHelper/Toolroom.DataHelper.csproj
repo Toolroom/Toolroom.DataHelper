@@ -70,6 +70,7 @@
     <Compile Include="Token\IUserToken.cs" />
     <Compile Include="Token\TokenExtensions.cs" />
     <Compile Include="Token\TokenValidity.cs" />
+    <Compile Include="XmlEntity\ComputationEntityExtensions.cs" />
     <Compile Include="XmlEntity\IXmlEntity.cs" />
     <Compile Include="XmlEntity\XmlEntityExtensions.cs" />
     <Compile Include="XmlEntity\XmlMappedAttribute.cs" />

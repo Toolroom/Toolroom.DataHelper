@@ -8,23 +8,25 @@ namespace Toolroom.DataHelper
         public static void HandleSaveChanges(this DbContext context, int? editUserId)
         {
             context.ChangeTracker.DetectChanges();
-            bool detectAgain = false;
+            var detectAgain = false;
+
             {
                 var changedItems = context.ChangeTracker.Entries();
                 foreach (var item in changedItems)
                 {
-                    if (item.Entity is IXmlEntity xmlEntity)
-                    {
-                        xmlEntity.XmlValues = xmlEntity.GetXmlValuesFromProperties(typeof(XmlMappedAttribute));
-                        
-                        detectAgain = true;
-                    }
+                    if (!(item.Entity is IXmlEntity xmlEntity)) 
+                        continue;
+
+                    xmlEntity.UpdatePreCommitValuesXml();
+                    detectAgain = true;
                 }
             }
 
             if (detectAgain)
+            {
                 context.ChangeTracker.DetectChanges();
-            detectAgain = false;
+                detectAgain = false;
+            }
 
             {
                 var changedItems = context.ChangeTracker.Entries();
@@ -35,9 +37,12 @@ namespace Toolroom.DataHelper
                         //store edit user id automatically
                         if (item.Entity is IEditUserEntity editUserEntity)
                             editUserEntity.EditUserId = editUserId;
+                        
+                        if (!(item.Entity is IComputationEntity computationEntity)) 
+                            continue;
 
                         //compute entities
-                        (item.Entity as IComputationEntity)?.Compute();
+                        computationEntity.UpdatePreCommitValuesComputation();
                         
                         detectAgain = true;
                     }
@@ -45,7 +50,10 @@ namespace Toolroom.DataHelper
             }
 
             if (detectAgain)
+            //{
                 context.ChangeTracker.DetectChanges();
+            //    detectAgain = false;
+            //}
         }
 
         public static void ObjectMaterialized(object sender, ObjectMaterializedEventArgs e)

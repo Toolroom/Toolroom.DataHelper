@@ -14,6 +14,13 @@ namespace Toolroom.DataHelper
         private const string ValueNodename = "Value";
         private const string KeyAttributename = "Key";
 
+        public static void UpdatePreCommitValuesXml(this IXmlEntity entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            
+            entity.XmlValues = entity.GetXmlValuesFromProperties(typeof(XmlMappedAttribute));
+        }
+
         public static string GetXmlValuesFromProperties(this IXmlEntity entity, Type xmlMappedAttributeType)
         {
             var properties = entity.GetXmlMappedProperties(xmlMappedAttributeType);
